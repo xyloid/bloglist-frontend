@@ -3,6 +3,65 @@ import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
+const NewBlog = ({ update }) => {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
+
+  const handleCreate = async (event) => {
+    event.preventDefault();
+    try {
+      const newBlog = { title, author, url };
+      console.log(newBlog);
+      await blogService.create(newBlog);
+
+      update();
+
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+    } catch (exception) {
+      console.log("failed to create new blog", exception);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Create a New Blog</h2>
+      <form onSubmit={handleCreate}>
+        <div>
+          title:{" "}
+          <input
+            type="text"
+            name="Title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            type="text"
+            name="Author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            type="text"
+            name="Url"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </div>
+  );
+};
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
 
@@ -10,7 +69,6 @@ const App = () => {
   const [password, setPassword] = useState("");
 
   const [user, setUser] = useState(null);
-
 
   // useEffect
   useEffect(() => {
@@ -28,9 +86,11 @@ const App = () => {
     try {
       const currentUser = await loginService.login({ username, password });
 
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(currentUser));
-      blogService.setToken(currentUser.token)
-
+      window.localStorage.setItem(
+        "loggedNoteappUser",
+        JSON.stringify(currentUser)
+      );
+      blogService.setToken(currentUser.token);
 
       setUser(currentUser);
       setUsername("");
@@ -40,10 +100,10 @@ const App = () => {
     }
   };
 
-  const handleLogout = ()=>{
-    setUser(null)
-    window.localStorage.removeItem('loggedNoteappUser')
-  }
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.removeItem("loggedNoteappUser");
+  };
 
   // internal components
 
@@ -80,7 +140,14 @@ const App = () => {
 
   const userInfo = () => (
     <div>
-      <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+      <p>
+        {user.name} logged in <button onClick={handleLogout}>logout</button>
+      </p>
+      <NewBlog
+        update={() => {
+          blogService.getAll().then((blogs) => setBlogs(blogs));
+        }}
+      />
     </div>
   );
 
