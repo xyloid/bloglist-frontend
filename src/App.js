@@ -11,11 +11,26 @@ const App = () => {
 
   const [user, setUser] = useState(null);
 
+
+  // useEffect
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
   // event handlers
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
       const currentUser = await loginService.login({ username, password });
+
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(currentUser));
+      blogService.setToken(currentUser.token)
+
 
       setUser(currentUser);
       setUsername("");
@@ -24,6 +39,11 @@ const App = () => {
       console.log("login error");
     }
   };
+
+  const handleLogout = ()=>{
+    setUser(null)
+    window.localStorage.removeItem('loggedNoteappUser')
+  }
 
   // internal components
 
@@ -60,7 +80,7 @@ const App = () => {
 
   const userInfo = () => (
     <div>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
     </div>
   );
 
