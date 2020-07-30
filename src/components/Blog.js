@@ -27,13 +27,14 @@ const Blog = ({ blog , updateAll}) => {
   }
 
   const handleRemove = async ()=>{
-    try{
-      await blogService.remove(blog)
-      updateAll()
-    }catch(exception){
-      console.log(exception)
+    if(window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)){
+      try{
+        await blogService.remove(blog)
+        updateAll()
+      }catch(exception){
+        console.log(exception)
+      }
     }
-
   }
 
   return (
