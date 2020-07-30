@@ -19,8 +19,6 @@ const Blog = ({ blog }) => {
       await blogService.update(blog)
       setBlogEntry({...blog})
       // setLikes(blog.likes)
-      // console.log("updated blog entry")
-      // console.log(blogEntry)
     }
     catch (exception){
       console.log(exception)
