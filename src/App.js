@@ -16,10 +16,15 @@ const App = () => {
   const [notice, setNotice] = useState(null);
   const [errorNotice, setErrorNotice] = useState(null);
 
+
+  const updateBlogs = ()=>{
+    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a,b)=>b.likes - a.likes)))
+  }
+
   // useEffect
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a,b)=>b.likes - a.likes)));
-  }, []);
+  useEffect(updateBlogs, []);
+
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
@@ -91,7 +96,7 @@ const App = () => {
       </Togglable>
       <h2>blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
       ))}
     </div>
   );

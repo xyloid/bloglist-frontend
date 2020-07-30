@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog , updateAll}) => {
   const [show, setShow] = useState(false);
   const [blogEntry, setBlogEntry] = useState(blog)
   // const [likes, setLikes] = useState(blog.likes)
@@ -19,6 +19,7 @@ const Blog = ({ blog }) => {
       await blogService.update(blog)
       setBlogEntry({...blog})
       // setLikes(blog.likes)
+      updateAll()
     }
     catch (exception){
       console.log(exception)
