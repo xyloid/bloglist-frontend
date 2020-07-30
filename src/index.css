@@ -18,3 +18,14 @@
     padding: 10px;
     margin-bottom: 10px;
 }
+
+.blog {
+  border-style: solid;
+  border-radius: 3px;
+  padding: 2px;
+  margin: 5px;
+}
+
+.line {
+  margin: 1px;
+}
