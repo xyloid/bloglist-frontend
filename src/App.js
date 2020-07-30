@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from "react";
-import Blog from "./components/Blog";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import Notification from "./components/Notification";
-import ErrorNotice from "./components/ErrorNotice";
-import NewBlog from "./components/NewBlog";
-import Togglable from "./components/Togglable";
-import LoginFrom from "./components/LoginForm";
+import React, { useState, useEffect } from 'react'
+import Blog from './components/Blog'
+import blogService from './services/blogs'
+import loginService from './services/login'
+import Notification from './components/Notification'
+import ErrorNotice from './components/ErrorNotice'
+import NewBlog from './components/NewBlog'
+import Togglable from './components/Togglable'
+import LoginFrom from './components/LoginForm'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState([])
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
 
-  const [notice, setNotice] = useState(null);
-  const [errorNotice, setErrorNotice] = useState(null);
+  const [notice, setNotice] = useState(null)
+  const [errorNotice, setErrorNotice] = useState(null)
 
 
-  const updateBlogs = ()=>{
-    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a,b)=>b.likes - a.likes)))
+  const updateBlogs = () => {
+    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a,b) => b.likes - a.likes)))
   }
 
   // useEffect
-  useEffect(updateBlogs, []);
+  useEffect(updateBlogs, [])
 
 
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   // event handlers
 
@@ -42,41 +42,41 @@ const App = () => {
       const currentUser = await loginService.login({
         username: usernm,
         password: passwd,
-      });
+      })
 
       window.localStorage.setItem(
-        "loggedNoteappUser",
+        'loggedNoteappUser',
         JSON.stringify(currentUser)
-      );
-      blogService.setToken(currentUser.token);
+      )
+      blogService.setToken(currentUser.token)
 
-      setNotice(`${currentUser.name} logged in`);
+      setNotice(`${currentUser.name} logged in`)
       setTimeout(() => {
-        setNotice(null);
-      }, 5000);
+        setNotice(null)
+      }, 5000)
 
-      setUser(currentUser);
+      setUser(currentUser)
     } catch (exception) {
-      console.log("login error", exception);
-      setErrorNotice(`failed to log in`);
+      console.log('login error', exception)
+      setErrorNotice('failed to log in')
       setTimeout(() => {
-        setErrorNotice(null);
-      }, 5000);
+        setErrorNotice(null)
+      }, 5000)
     }
-  };
+  }
 
   const handleLogout = () => {
-    setUser(null);
-    window.localStorage.removeItem("loggedNoteappUser");
-  };
+    setUser(null)
+    window.localStorage.removeItem('loggedNoteappUser')
+  }
 
   const createNewBlog = (newBlog) => {
-    setNotice(`${newBlog.title} by ${newBlog.author} added`);
+    setNotice(`${newBlog.title} by ${newBlog.author} added`)
     setTimeout(() => {
-      setNotice(null);
-    }, 5000);
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  };
+      setNotice(null)
+    }, 5000)
+    blogService.getAll().then((blogs) => setBlogs(blogs))
+  }
 
   // internal components
 
@@ -84,7 +84,7 @@ const App = () => {
     <Togglable buttonLabel="login">
       <LoginFrom handleLogin={handleLogin} />
     </Togglable>
-  );
+  )
 
   const userInfo = () => (
     <div>
@@ -99,7 +99,7 @@ const App = () => {
         <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
       ))}
     </div>
-  );
+  )
 
   return (
     <div>
@@ -108,7 +108,7 @@ const App = () => {
 
       {user === null ? loginForm() : userInfo()}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

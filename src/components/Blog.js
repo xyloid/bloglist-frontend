@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import blogService from "../services/blogs";
+import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog , updateAll}) => {
-  const [show, setShow] = useState(false);
+const Blog = ({ blog , updateAll }) => {
+  const [show, setShow] = useState(false)
   const [blogEntry, setBlogEntry] = useState(blog)
   // const [likes, setLikes] = useState(blog.likes)
   const toggleShow = () => {
-    setShow(!show);
-  };
+    setShow(!show)
+  }
 
-  const hideWhenShow = { display: show ? "none" : "" };
-  const renderWhenShow = { display: show ? "" : "none" };
+  const hideWhenShow = { display: show ? 'none' : '' }
+  const renderWhenShow = { display: show ? '' : 'none' }
 
-  const handleLike = async ()=>{
+  const handleLike = async () => {
     try{
       blog.likes = blogEntry.likes
       blog.likes = blog.likes+1
       await blogService.update(blog)
-      setBlogEntry({...blog})
+      setBlogEntry({ ...blog })
       // setLikes(blog.likes)
       updateAll()
     }
@@ -26,7 +26,7 @@ const Blog = ({ blog , updateAll}) => {
     }
   }
 
-  const handleRemove = async ()=>{
+  const handleRemove = async () => {
     if(window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)){
       try{
         await blogService.remove(blog)
@@ -53,7 +53,7 @@ const Blog = ({ blog , updateAll}) => {
         <button onClick={handleRemove}>remove</button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
