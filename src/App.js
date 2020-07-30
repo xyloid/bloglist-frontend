@@ -2,65 +2,10 @@ import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Notification from "./components/Notification";
+import ErrorNotice from "./components/ErrorNotice";
+import NewBlog from "./components/NewBlog";
 
-const NewBlog = ({ update }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-
-  const handleCreate = async (event) => {
-    event.preventDefault();
-    try {
-      const newBlog = { title, author, url };
-      console.log(newBlog);
-      await blogService.create(newBlog);
-
-      update();
-
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-    } catch (exception) {
-      console.log("failed to create new blog", exception);
-    }
-  };
-
-  return (
-    <div>
-      <h2>Create a New Blog</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-          title:{" "}
-          <input
-            type="text"
-            name="Title"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            type="text"
-            name="Author"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            type="text"
-            name="Url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </div>
-  );
-};
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -69,6 +14,9 @@ const App = () => {
   const [password, setPassword] = useState("");
 
   const [user, setUser] = useState(null);
+
+  const [notice, setNotice] = useState(null);
+  const [errorNotice, setErrorNotice] = useState(null);
 
   // useEffect
   useEffect(() => {
@@ -92,11 +40,20 @@ const App = () => {
       );
       blogService.setToken(currentUser.token);
 
+      setNotice(`${currentUser.name} logged in`)
+      setTimeout(()=>{
+        setNotice(null)
+      },5000)
+
       setUser(currentUser);
       setUsername("");
       setPassword("");
-    } catch {
-      console.log("login error");
+    } catch (exception){
+      console.log("login error",exception);
+      setErrorNotice(`failed to log in`)
+      setTimeout(()=>{
+        setErrorNotice(null)
+      },5000)
     }
   };
 
@@ -157,6 +114,9 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notice}/>
+      <ErrorNotice message={errorNotice}/>
+
       {user === null ? loginForm() : userInfo()}
       <h2>blogs</h2>
       {blogs.map((blog) => (
