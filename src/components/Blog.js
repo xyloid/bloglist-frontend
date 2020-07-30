@@ -39,11 +39,11 @@ const Blog = ({ blog , updateAll }) => {
 
   return (
     <div>
-      <div className="blog" style={hideWhenShow}>
-        {blogEntry.title} {blogEntry.author}
+      <div id = "simple" className="blog" style={hideWhenShow}>
+        {blogEntry.title} {blogEntry.user.name}
         <button onClick={toggleShow}>view</button>
       </div>
-      <div className="blog" style={renderWhenShow}>
+      <div id = "detail" className="blog" style={renderWhenShow}>
         <p className="line">
           {blogEntry.title} <button onClick={toggleShow}>hide</button>
         </p>
