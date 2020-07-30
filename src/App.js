@@ -5,6 +5,8 @@ import loginService from "./services/login";
 import Notification from "./components/Notification";
 import ErrorNotice from "./components/ErrorNotice";
 import NewBlog from "./components/NewBlog";
+import Togglable from "./components/Togglable";
+import LoginFrom from "./components/LoginForm";
 
 
 const App = () => {
@@ -57,6 +59,31 @@ const App = () => {
     }
   };
 
+  const handleLogin2 =async (usernm, passwd)=>{
+    try {
+      const currentUser = await loginService.login({ username:usernm, password:passwd });
+
+      window.localStorage.setItem(
+        "loggedNoteappUser",
+        JSON.stringify(currentUser)
+      );
+      blogService.setToken(currentUser.token);
+
+      setNotice(`${currentUser.name} logged in`)
+      setTimeout(()=>{
+        setNotice(null)
+      },5000)
+
+      setUser(currentUser);
+    } catch (exception){
+      console.log("login error",exception);
+      setErrorNotice(`failed to log in`)
+      setTimeout(()=>{
+        setErrorNotice(null)
+      },5000)
+    }
+  }
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedNoteappUser");
@@ -65,34 +92,37 @@ const App = () => {
   // internal components
 
   const loginForm = () => (
-    <div>
-      <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => {
-              setUsername(target.value);
-            }}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => {
-              setPassword(target.value);
-            }}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
+    <Togglable buttonLabel="login">
+      <LoginFrom handleLogin = {handleLogin2}/>
+    </Togglable>
+    // <div>
+    //   <h2>Log in to application</h2>
+    //   <form onSubmit={handleLogin}>
+    //     <div>
+    //       username
+    //       <input
+    //         type="text"
+    //         value={username}
+    //         name="Username"
+    //         onChange={({ target }) => {
+    //           setUsername(target.value);
+    //         }}
+    //       />
+    //     </div>
+    //     <div>
+    //       password
+    //       <input
+    //         type="password"
+    //         value={password}
+    //         name="Password"
+    //         onChange={({ target }) => {
+    //           setPassword(target.value);
+    //         }}
+    //       />
+    //     </div>
+    //     <button type="submit">login</button>
+    //   </form>
+    // </div>
   );
 
   const userInfo = () => (
