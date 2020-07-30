@@ -24,6 +24,15 @@ const Blog = ({ blog , updateAll}) => {
     catch (exception){
       console.log(exception)
     }
+  }
+
+  const handleRemove = async ()=>{
+    try{
+      await blogService.remove(blog)
+      updateAll()
+    }catch(exception){
+      console.log(exception)
+    }
 
   }
 
@@ -40,6 +49,7 @@ const Blog = ({ blog , updateAll}) => {
         <p className="line">{blogEntry.url}</p>
         <p className="line">{blogEntry.likes} <button onClick={handleLike}>like</button></p>
         <p className="line">{blogEntry.user.name}</p>
+        <button onClick={handleRemove}>remove</button>
       </div>
     </div>
   );
