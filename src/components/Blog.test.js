@@ -34,4 +34,16 @@ describe("<Blog />",()=>{
 
     })
 
+
+    test("toggle", ()=>{
+        const view = component.getByText("view")
+        console.log(view)
+        fireEvent.click(view)
+
+        const simple = component.container.querySelector('#simple')
+        const detail = component.container.querySelector('#detail')
+        expect(simple).toHaveStyle("display:none")
+        expect(detail).not.toHaveStyle("display:none")
+    })
+
 })
