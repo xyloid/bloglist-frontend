@@ -19,11 +19,14 @@
     margin-bottom: 10px;
 }
 
+
 .blog {
+  padding-top: 10px;
+  padding-left: 2px;
   border-style: solid;
-  border-radius: 3px;
-  padding: 2px;
-  margin: 5px;
+  border-radius: 2px;
+  border-width: 2px;
+  margin-bottom: 5px;
 }
 
 .line {

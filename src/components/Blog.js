@@ -11,7 +11,7 @@ const Blog = ({ blog }) => {
   return (
     <div>
       <div className="blog" style={hideWhenShow}>
-        {blog.title}
+        {blog.title} {blog.author}
         <button onClick={toggleShow}>view</button>
       </div>
       <div className="blog" style={renderWhenShow}>
@@ -19,7 +19,7 @@ const Blog = ({ blog }) => {
           {blog.title} <button onClick={toggleShow}>hide</button>
         </p>
         <p className="line">{blog.url}</p>
-        <p className="line">{blog.likes}</p>
+        <p className="line">{blog.likes} <button>like</button></p>
         <p className="line">{blog.user.name}</p>
       </div>
     </div>
