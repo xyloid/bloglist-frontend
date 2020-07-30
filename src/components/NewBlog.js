@@ -10,10 +10,10 @@ const NewBlog = ({ update }) => {
       event.preventDefault();
       try {
         const newBlog = { title, author, url };
-        console.log(newBlog);
-        await blogService.create(newBlog);
-  
-        update();
+        // console.log(newBlog);
+        const res = await blogService.create(newBlog);
+        // console.log(res)
+        update(res);
   
         setTitle("");
         setAuthor("");

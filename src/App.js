@@ -101,7 +101,11 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <NewBlog
-        update={() => {
+        update={(newBlog) => {
+          setNotice(`${newBlog.title} by ${newBlog.author} added`)
+      setTimeout(()=>{
+        setNotice(null)
+      },5000)
           blogService.getAll().then((blogs) => setBlogs(blogs));
         }}
       />
