@@ -4,7 +4,7 @@ import blogService from "../services/blogs";
 const Blog = ({ blog }) => {
   const [show, setShow] = useState(false);
   const [blogEntry, setBlogEntry] = useState(blog)
-  const [likes, setLikes] = useState(blog.likes)
+  // const [likes, setLikes] = useState(blog.likes)
   const toggleShow = () => {
     setShow(!show);
   };
@@ -17,8 +17,8 @@ const Blog = ({ blog }) => {
       blog.likes = blogEntry.likes
       blog.likes = blog.likes+1
       await blogService.update(blog)
-      setBlogEntry(blog)
-      setLikes(blog.likes)
+      setBlogEntry({...blog})
+      // setLikes(blog.likes)
       // console.log("updated blog entry")
       // console.log(blogEntry)
     }
@@ -39,7 +39,7 @@ const Blog = ({ blog }) => {
           {blogEntry.title} <button onClick={toggleShow}>hide</button>
         </p>
         <p className="line">{blogEntry.url}</p>
-        <p className="line">{likes} <button onClick={handleLike}>like</button></p>
+        <p className="line">{blogEntry.likes} <button onClick={handleLike}>like</button></p>
         <p className="line">{blogEntry.user.name}</p>
       </div>
     </div>
