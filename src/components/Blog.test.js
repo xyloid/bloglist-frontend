@@ -67,7 +67,7 @@ describe('likes', ()=>{
 
     test('likes', ()=>{
         const mockHandler = jest.fn()
-        component = render(<Blog blog={blog} updateAll={mockHandler}/>);
+        component = render(<Blog blog={blog} test={mockHandler}/>);
         const view = component.getByText("view")
         fireEvent.click(view)
         const like = component.getByText("like")

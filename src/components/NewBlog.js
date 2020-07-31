@@ -1,35 +1,39 @@
-import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import React, { useState } from "react";
+import blogService from "../services/blogs";
 
-const NewBlog = ({ update }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const NewBlog = ({ update, test }) => {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleCreate = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const newBlog = { title, author, url }
+      const newBlog = { title, author, url };
+      if(test){
+        test(newBlog)
+      }
       // console.log(newBlog);
-      const res = await blogService.create(newBlog)
+      const res = await blogService.create(newBlog);
       // console.log(res)
-      update(res)
+      update(res);
 
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      setTitle("");
+      setAuthor("");
+      setUrl("");
     } catch (exception) {
-      console.log('failed to create new blog', exception)
+      console.log("failed to create new blog", exception);
     }
-  }
+  };
 
   return (
     <div>
       <h2>Create a New Blog</h2>
       <form onSubmit={handleCreate}>
         <div>
-            title:{' '}
+          title:
           <input
+            id="title"
             type="text"
             name="Title"
             value={title}
@@ -37,8 +41,9 @@ const NewBlog = ({ update }) => {
           />
         </div>
         <div>
-            author:
+          author:
           <input
+            id="author"
             type="text"
             name="Author"
             value={author}
@@ -46,8 +51,9 @@ const NewBlog = ({ update }) => {
           />
         </div>
         <div>
-            url:
+          url:
           <input
+            id="url"
             type="text"
             name="Url"
             value={url}
@@ -57,7 +63,7 @@ const NewBlog = ({ update }) => {
         <button type="submit">create</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default NewBlog
+export default NewBlog;
