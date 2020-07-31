@@ -14,6 +14,7 @@ const Blog = ({ blog , updateAll }) => {
 
   const handleLike = async () => {
     try{
+      updateAll()
       blog.likes = blogEntry.likes
       blog.likes = blog.likes+1
       await blogService.update(blog)
