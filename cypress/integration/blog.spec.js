@@ -47,7 +47,7 @@ describe("Blog app", function () {
     });
   });
 
-  describe.only('When logged in', function(){
+  describe('When logged in', function(){
       beforeEach(function(){
         cy.contains("login").click();
 
@@ -65,6 +65,23 @@ describe("Blog app", function () {
         cy.get('#url').type('cypress.com')
         cy.get('form').submit()
         cy.get('html').should('contain', "new blog from cypress Edsger W. Dijkstra")
+      })
+
+      describe('User can like a blog', function(){
+          beforeEach(function(){
+            cy.contains("new blog").click()
+            cy.get('#author').type('Edsger')
+            cy.get('#title').type('new blog from cypress')
+            cy.get('#url').type('cypress.com')
+            cy.get('form').submit()
+          })
+          it.only('like a blog',function(){
+              cy.contains('view').click()
+              cy.contains('like').click()
+              cy.get('html').should('contain','1')
+              cy.contains('like').click()
+              cy.get('html').should('contain','2')
+          })
       })
   })
 
