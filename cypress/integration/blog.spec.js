@@ -9,6 +9,13 @@ describe("Blog app", function () {
       password: "programmer",
     };
     cy.request("POST", "http://localhost:3003/api/users/", user);
+
+    const user2 = {
+      username: "mike",
+      name: "Michael Chan",
+      password: "secret",
+    };
+    cy.request("POST", "http://localhost:3003/api/users/", user2);
     cy.visit("http://localhost:3000");
   });
 
@@ -29,7 +36,7 @@ describe("Blog app", function () {
       cy.get("#login-button").click();
 
       cy.contains("logged in");
-      cy.get('html').should('contain','Edsger W. Dijkstra logged in')
+      cy.get("html").should("contain", "Edsger W. Dijkstra logged in");
     });
 
     it("fails with wrong credentials", function () {
@@ -42,48 +49,72 @@ describe("Blog app", function () {
       cy.get("#login-button").click();
 
       cy.contains("failed to log in");
-        cy.get('html').should('not.contain', 'logged in')
-
+      cy.get("html").should("not.contain", "logged in");
     });
   });
 
-  describe('When logged in', function(){
-      beforeEach(function(){
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.contains("login").click();
+
+      cy.get("input:first").type("edsgar");
+
+      cy.get("input:last").type("programmer");
+
+      cy.get("#login-button").click();
+    });
+
+    it("A blog can be created", function () {
+      cy.contains("new blog").click();
+      cy.get("#author").type("Edsger");
+      cy.get("#title").type("new blog from cypress");
+      cy.get("#url").type("cypress.com");
+      cy.get("form").submit();
+      cy.get("html").should(
+        "contain",
+        "new blog from cypress Edsger W. Dijkstra"
+      );
+    });
+
+    describe("User can like a blog", function () {
+      beforeEach(function () {
+        cy.contains("new blog").click();
+        cy.get("#author").type("Edsger");
+        cy.get("#title").type("new blog from cypress");
+        cy.get("#url").type("cypress.com");
+        cy.get("form").submit();
+      });
+      it("like a blog", function () {
+        cy.contains("view").click();
+        cy.contains("like").click();
+        cy.get("html").should("contain", "1");
+        cy.contains("like").click();
+        cy.get("html").should("contain", "2");
+      });
+      it("delete by the author", function () {
+        cy.contains("view").click();
+        cy.contains("remove").click();
+        cy.get("html").should(
+          "not.contain",
+          "new blog from cypress Edsger W. Dijkstra"
+        );
+      });
+      it.only("another user can not delete", function () {
+        cy.contains("logout").click();
         cy.contains("login").click();
 
-        cy.get("input:first").type("edsgar");
+        cy.get("input:first").type("mike");
 
-        cy.get("input:last").type("programmer");
+        cy.get("input:last").type("secret");
 
         cy.get("#login-button").click();
-      })
-
-      it('A blog can be created', function(){
-        cy.contains("new blog").click()
-        cy.get('#author').type('Edsger')
-        cy.get('#title').type('new blog from cypress')
-        cy.get('#url').type('cypress.com')
-        cy.get('form').submit()
-        cy.get('html').should('contain', "new blog from cypress Edsger W. Dijkstra")
-      })
-
-      describe('User can like a blog', function(){
-          beforeEach(function(){
-            cy.contains("new blog").click()
-            cy.get('#author').type('Edsger')
-            cy.get('#title').type('new blog from cypress')
-            cy.get('#url').type('cypress.com')
-            cy.get('form').submit()
-          })
-          it.only('like a blog',function(){
-              cy.contains('view').click()
-              cy.contains('like').click()
-              cy.get('html').should('contain','1')
-              cy.contains('like').click()
-              cy.get('html').should('contain','2')
-          })
-      })
-  })
-
-
+        cy.contains("view").click();
+        cy.contains("remove").click();
+        cy.get("html").should(
+          "contain",
+          "new blog from cypress Edsger W. Dijkstra"
+        );
+      });
+    });
+  });
 });
