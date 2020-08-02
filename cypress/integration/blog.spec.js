@@ -99,7 +99,7 @@ describe("Blog app", function () {
           "new blog from cypress Edsger W. Dijkstra"
         );
       });
-      it.only("another user can not delete", function () {
+      it("another user can not delete", function () {
         cy.contains("logout").click();
         cy.contains("login").click();
 
@@ -116,5 +116,49 @@ describe("Blog app", function () {
         );
       });
     });
+
+    describe('blog ordered by likes', function(){
+        beforeEach(function(){
+        cy.contains("new blog").click();
+        cy.get("#author").type("Edsger");
+        cy.get("#title").type("first blog");
+        cy.get("#url").type("cypress.com");
+        cy.get("form").submit();
+
+        cy.get("#author").type("Edsger");
+        cy.get("#title").type("second blog");
+        cy.get("#url").type("cypress.com");
+        cy.get("form").submit();
+
+        cy.get("#author").type("Edsger");
+        cy.get("#title").type("third blog");
+        cy.get("#url").type("cypress.com");
+        cy.get("form").submit();
+
+        })
+
+        it.only('like',function(){
+            cy.contains("first blog").parent().contains('view').click()
+            cy.contains("second blog").parent().contains('view').click()
+
+            cy.contains("second blog").parent().contains('like').click()
+            cy.contains("second blog").parent().contains('like').click()
+            cy.contains("second blog").parent().contains('like').click()
+
+            cy.contains("third blog").parent().contains('view').click()
+            
+
+
+            cy.contains("third blog").parent().contains('like').click()
+            cy.contains("third blog").parent().contains('like').click()
+            
+            cy.get('html').should("contain","2").and("contain","3").and("contain","0")
+
+            cy.get('.blog:first').contains('second blog')
+            cy.get('.blog:last').contains('first blog')
+
+        })
+    })
+
   });
 });
