@@ -46,4 +46,27 @@ describe("Blog app", function () {
 
     });
   });
+
+  describe.only('When logged in', function(){
+      beforeEach(function(){
+        cy.contains("login").click();
+
+        cy.get("input:first").type("edsgar");
+
+        cy.get("input:last").type("programmer");
+
+        cy.get("#login-button").click();
+      })
+
+      it('A blog can be created', function(){
+        cy.contains("new blog").click()
+        cy.get('#author').type('Edsger')
+        cy.get('#title').type('new blog from cypress')
+        cy.get('#url').type('cypress.com')
+        cy.get('form').submit()
+        cy.get('html').should('contain', "new blog from cypress Edsger W. Dijkstra")
+      })
+  })
+
+
 });
