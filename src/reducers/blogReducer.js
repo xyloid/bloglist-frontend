@@ -65,7 +65,9 @@ const blogReducer = (state = [], action) => {
         ...liked,
         likes: action.data.likes,
       };
-      return state.map((blog) => (blog.id !== id ? blog : updated));
+      return state
+        .map((blog) => (blog.id !== id ? blog : updated))
+        .sort((a, b) => b.likes - a.likes);
     }
     case "DEL_BLOG": {
       const id = action.data.id;
