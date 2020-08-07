@@ -30,6 +30,7 @@ const LoginForm = ({ handleLogin }) => {
           <input
             value={password}
             name="Password"
+            type="password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
