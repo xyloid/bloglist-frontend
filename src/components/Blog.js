@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
-import { likeBlog } from "../reducers/blogReducer";
+import { likeBlog, delBlog } from "../reducers/blogReducer";
 
 const Blog = ({ blog, updateAll, test }) => {
   const dispatch = useDispatch();
@@ -25,12 +25,10 @@ const Blog = ({ blog, updateAll, test }) => {
       // setup new likes number and the update the redux and blogService at the same time.
       blog.likes = blogEntry.likes;
       blog.likes = blog.likes + 1;
-      
-      
+
       dispatch(likeBlog(blog));
       setBlogEntry({ ...blog });
       await blogService.update(blog);
-
     } catch (exception) {
       console.log(exception);
     }
@@ -40,7 +38,8 @@ const Blog = ({ blog, updateAll, test }) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
       try {
         await blogService.remove(blog);
-        updateAll();
+        dispatch(delBlog(blog.id));
+        // updateAll();
       } catch (exception) {
         console.log(exception);
       }
