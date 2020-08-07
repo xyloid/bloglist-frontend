@@ -21,13 +21,16 @@ const Blog = ({ blog, updateAll, test }) => {
       if (test) {
         test();
       }
+
+      // setup new likes number and the update the redux and blogService at the same time.
       blog.likes = blogEntry.likes;
       blog.likes = blog.likes + 1;
-      await blogService.update(blog);
+      
+      
+      dispatch(likeBlog(blog));
       setBlogEntry({ ...blog });
-      dispatch(likeBlog(blog.id));
-      // setLikes(blog.likes)
-      // updateAll();
+      await blogService.update(blog);
+
     } catch (exception) {
       console.log(exception);
     }

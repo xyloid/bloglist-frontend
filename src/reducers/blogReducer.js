@@ -63,7 +63,7 @@ const blogReducer = (state = [], action) => {
       const liked = state.find((blog) => blog.id === id);
       const updated = {
         ...liked,
-        likes: liked.likes + 1,
+        likes: action.data.likes,
       };
       return state.map((blog) => (blog.id !== id ? blog : updated));
 
@@ -79,10 +79,10 @@ export const createBlog = (newBlog) => {
   };
 };
 
-export const likeBlog = (id) => {
+export const likeBlog = (blog) => {
   return {
     type: "LIKE_BLOG",
-    data: { id },
+    data:blog,
   };
 };
 
