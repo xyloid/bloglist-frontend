@@ -55,7 +55,7 @@ const initialBlogs = [
 const blogReducer = (state = [], action) => {
   switch (action.type) {
     case "INIT_BLOG":
-      return action.data;
+      return action.data.sort((a, b) => b.likes - a.likes);
     case "NEW_BLOG":
       return state.concat(action.data);
     case "LIKE_BLOG": {

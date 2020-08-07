@@ -107,7 +107,7 @@ const App = () => {
       </Togglable>
       <h2>blogs</h2>
       {blog_redux.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   );

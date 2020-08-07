@@ -3,7 +3,7 @@ import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { likeBlog, delBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, updateAll, test }) => {
+const Blog = ({ blog }) => {
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
@@ -18,9 +18,6 @@ const Blog = ({ blog, updateAll, test }) => {
 
   const handleLike = async () => {
     try {
-      if (test) {
-        test();
-      }
 
       // setup new likes number and the update the redux and blogService at the same time.
       // blog.likes = blogEntry.likes;
