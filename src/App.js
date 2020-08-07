@@ -78,15 +78,15 @@ const App = () => {
     }, 5000);
   };
 
-  const createNewBlog = (newBlog) => {
-    dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`));
-    setTimeout(() => {
-      dispatch(setNoticeContent(null));
-    }, 5000);
-    blogService
-      .getAll()
-      .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
-  };
+  // const createNewBlog = (newBlog) => {
+  //   dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`));
+  //   setTimeout(() => {
+  //     dispatch(setNoticeContent(null));
+  //   }, 5000);
+  //   blogService
+  //     .getAll()
+  //     .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
+  // };
 
   // internal components
 
@@ -102,7 +102,7 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="new blog">
-        <NewBlog update={createNewBlog} />
+        <NewBlog />
       </Togglable>
       <h2>blogs</h2>
       {blog_redux.map((blog) => (
