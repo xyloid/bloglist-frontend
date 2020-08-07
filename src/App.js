@@ -9,7 +9,8 @@ import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
 import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
-import {setNoticeContent}from './reducers/noticeReducer'
+import { setNoticeContent } from "./reducers/noticeReducer";
+import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,6 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
 
   const [user, setUser] = useState(null);
-
-  const [errorNotice, setErrorNotice] = useState(null);
 
   const updateBlogs = () => {
     dispatch(initBlog());
@@ -56,17 +55,17 @@ const App = () => {
       blogService.setToken(currentUser.token);
 
       // setNotice(`${currentUser.name} logged in`);
-      dispatch(setNoticeContent(`${currentUser.name} logged in`))
+      dispatch(setNoticeContent(`${currentUser.name} logged in`));
       setTimeout(() => {
-        dispatch(setNoticeContent(null))
+        dispatch(setNoticeContent(null));
       }, 5000);
 
       setUser(currentUser);
     } catch (exception) {
       console.log("login error", exception);
-      setErrorNotice("failed to log in");
+      dispatch(setErrorNoticeContent("failed to log in"));
       setTimeout(() => {
-        setErrorNotice(null);
+        dispatch(setErrorNoticeContent(null));
       }, 5000);
     }
   };
@@ -75,17 +74,17 @@ const App = () => {
     setUser(null);
     window.localStorage.removeItem("loggedNoteappUser");
 
-    dispatch(setNoticeContent(`You have logged out`))
-      setTimeout(() => {
-        dispatch(setNoticeContent(null))
-      }, 5000);
+    dispatch(setNoticeContent(`You have logged out`));
+    setTimeout(() => {
+      dispatch(setNoticeContent(null));
+    }, 5000);
   };
 
   const createNewBlog = (newBlog) => {
-    dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`))
-      setTimeout(() => {
-        dispatch(setNoticeContent(null))
-      }, 5000);
+    dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`));
+    setTimeout(() => {
+      dispatch(setNoticeContent(null));
+    }, 5000);
     blogService.getAll().then((blogs) => setBlogs(blogs));
   };
 
@@ -119,7 +118,7 @@ const App = () => {
   return (
     <div>
       <Notification />
-      <ErrorNotice message={errorNotice} />
+      <ErrorNotice />
 
       {user === null ? loginForm() : userInfo()}
     </div>

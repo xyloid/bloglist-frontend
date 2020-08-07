@@ -1,6 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-const ErrorNotice = ({ message }) => {
+const ErrorNotice = () => {
+  const message = useSelector((state) => state.errNotice);
   if (message === null || message.trim() === "") {
     return null;
   }
