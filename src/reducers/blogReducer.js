@@ -83,11 +83,11 @@ export const likeBlog = (id) => {
   };
 };
 
-export const initBlog = () => {
+export const initBlog = (blogs) => {
   const anecdotes = initialBlogs;
   return {
     type: "INIT_BLOG",
-    data: anecdotes,
+    data: blogs,
   };
 };
 

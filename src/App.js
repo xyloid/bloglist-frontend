@@ -16,15 +16,13 @@ const App = () => {
   const dispatch = useDispatch();
   const blog_redux = useSelector((state) => state.blogs);
 
-  const [blogs, setBlogs] = useState([]);
-
   const [user, setUser] = useState(null);
 
   const updateBlogs = () => {
-    dispatch(initBlog());
+    // dispatch(initBlog());
     blogService
       .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
+      .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
   };
 
   // useEffect
@@ -85,7 +83,9 @@ const App = () => {
     setTimeout(() => {
       dispatch(setNoticeContent(null));
     }, 5000);
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService
+      .getAll()
+      .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
   };
 
   // internal components
@@ -105,10 +105,6 @@ const App = () => {
         <NewBlog update={createNewBlog} />
       </Togglable>
       <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
-      ))}
-      <h2>blogs redux</h2>
       {blog_redux.map((blog) => (
         <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
       ))}
