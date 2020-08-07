@@ -20,6 +20,7 @@ const App = () => {
 
   const updateBlogs = () => {
     // dispatch(initBlog());
+    console.log('update all blogs')
     blogService
       .getAll()
       .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
@@ -106,7 +107,7 @@ const App = () => {
       </Togglable>
       <h2>blogs</h2>
       {blog_redux.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   );
