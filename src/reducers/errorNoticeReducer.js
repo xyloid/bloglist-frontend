@@ -7,7 +7,7 @@ const errorNoticeReducer = (state="", action) => {
     }
   };
   
-  export const setErrorNotice = (message) => {
+  export const setErrorNoticeContent = (message) => {
     return {
       type: "ERR_NOTICE_SET",
       data: message,

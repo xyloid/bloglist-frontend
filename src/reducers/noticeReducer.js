@@ -7,7 +7,7 @@ const noticeReducer = (state="", action) => {
   }
 };
 
-export const setNotice = (message) => {
+export const setNoticeContent = (message) => {
   return {
     type: "NOTICE_SET",
     data: message,

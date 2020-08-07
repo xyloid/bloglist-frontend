@@ -9,6 +9,7 @@ import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
 import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
+import {setNoticeContent}from './reducers/noticeReducer'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,12 +19,10 @@ const App = () => {
 
   const [user, setUser] = useState(null);
 
-  const [notice, setNotice] = useState(null);
   const [errorNotice, setErrorNotice] = useState(null);
 
   const updateBlogs = () => {
     dispatch(initBlog());
-
     blogService
       .getAll()
       .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
@@ -56,9 +55,10 @@ const App = () => {
       );
       blogService.setToken(currentUser.token);
 
-      setNotice(`${currentUser.name} logged in`);
+      // setNotice(`${currentUser.name} logged in`);
+      dispatch(setNoticeContent(`${currentUser.name} logged in`))
       setTimeout(() => {
-        setNotice(null);
+        dispatch(setNoticeContent(null))
       }, 5000);
 
       setUser(currentUser);
@@ -74,13 +74,18 @@ const App = () => {
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedNoteappUser");
+
+    dispatch(setNoticeContent(`You have logged out`))
+      setTimeout(() => {
+        dispatch(setNoticeContent(null))
+      }, 5000);
   };
 
   const createNewBlog = (newBlog) => {
-    setNotice(`${newBlog.title} by ${newBlog.author} added`);
-    setTimeout(() => {
-      setNotice(null);
-    }, 5000);
+    dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`))
+      setTimeout(() => {
+        dispatch(setNoticeContent(null))
+      }, 5000);
     blogService.getAll().then((blogs) => setBlogs(blogs));
   };
 
@@ -113,7 +118,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={notice} />
+      <Notification />
       <ErrorNotice message={errorNotice} />
 
       {user === null ? loginForm() : userInfo()}
