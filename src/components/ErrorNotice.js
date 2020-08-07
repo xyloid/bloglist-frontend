@@ -1,10 +1,12 @@
-import React from 'react'
+import React from "react";
+import { useSelector } from "react-redux";
 
-const ErrorNotice = ({ message }) => {
-  if (message === null) {
-    return null
+const ErrorNotice = () => {
+  const message = useSelector((state) => state.errNotice);
+  if (message === null || message.trim() === "") {
+    return null;
   }
-  return <div className="error">{message}</div>
-}
+  return <div className="error">{message}</div>;
+};
 
-export default ErrorNotice
+export default ErrorNotice;
