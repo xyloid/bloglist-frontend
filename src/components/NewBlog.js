@@ -3,6 +3,7 @@ import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
+import { setNoticeContent } from "../reducers/noticeReducer";
 
 const NewBlog = ({ update, test }) => {
   const dispatch = useDispatch();
@@ -24,16 +25,19 @@ const NewBlog = ({ update, test }) => {
       // update(res);
       // dispatch(createBlog(res));
 
-      event.target.Title.value = ""
-      event.target.Author.value = ""
-      event.target.Url.value = ""
-      
+      event.target.Title.value = "";
+      event.target.Author.value = "";
+      event.target.Url.value = "";
+
       // this part must be executed after the event target is modified.
       const res = await blogService.create(newBlog);
       console.log("new blog", res);
 
       dispatch(createBlog(res));
-
+      dispatch(setNoticeContent(`${res.title} by ${res.author} added`));
+      setTimeout(() => {
+        dispatch(setNoticeContent(null));
+      }, 5000);
     } catch (exception) {
       console.log(exception.json);
       console.log("failed to create new blog", exception);
