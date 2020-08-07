@@ -8,10 +8,11 @@ import NewBlog from "./components/NewBlog";
 import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
 import { initBlog } from "./reducers/userReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = useDispatch();
+  const blog_redux = useSelector(state=>state)
 
   const [blogs, setBlogs] = useState([]);
 
@@ -104,7 +105,7 @@ const App = () => {
         <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
       ))}
       <h2>blogs redux</h2>
-      {blogs.map((blog) => (
+      {blog_redux.map((blog) => (
         <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
       ))}
     </div>
