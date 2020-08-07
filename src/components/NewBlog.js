@@ -1,28 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import blogService from "../services/blogs";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../reducers/blogReducer";
+import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
 
 const NewBlog = ({ update, test }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
 
   const handleCreate = async (event) => {
     event.preventDefault();
+    console.log(event.target.author.value);
     try {
-      const newBlog = { title, author, url };
-      if(test){
-        test(newBlog)
+      const newBlog = {
+        title: event.target.Title.value,
+        author: event.target.Author.value,
+        url: event.target.Url.value,
+      };
+      if (test) {
+        test(newBlog);
       }
       // console.log(newBlog);
-      const res = await blogService.create(newBlog);
-      // console.log(res)
-      update(res);
 
-      setTitle("");
-      setAuthor("");
-      setUrl("");
+      // update(res);
+      // dispatch(createBlog(res));
+
+      event.target.Title.value = ""
+      event.target.Author.value = ""
+      event.target.Url.value = ""
+      
+      // this part must be executed after the event target is modified.
+      const res = await blogService.create(newBlog);
+      console.log("new blog", res);
+
+      dispatch(createBlog(res));
+
     } catch (exception) {
+      console.log(exception.json);
       console.log("failed to create new blog", exception);
+      dispatch(setErrorNoticeContent(exception.message));
+      setTimeout(() => {
+        dispatch(setErrorNoticeContent(null));
+      }, 5000);
     }
   };
 
@@ -36,8 +54,8 @@ const NewBlog = ({ update, test }) => {
             id="title"
             type="text"
             name="Title"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
+            // value={title}
+            // onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
@@ -46,8 +64,8 @@ const NewBlog = ({ update, test }) => {
             id="author"
             type="text"
             name="Author"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+            // value={author}
+            // onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
@@ -56,8 +74,8 @@ const NewBlog = ({ update, test }) => {
             id="url"
             type="text"
             name="Url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
+            // value={url}
+            // onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <button type="submit">create</button>
