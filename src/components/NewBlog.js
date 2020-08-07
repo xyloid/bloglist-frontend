@@ -5,7 +5,7 @@ import { createBlog } from "../reducers/blogReducer";
 import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
 import { setNoticeContent } from "../reducers/noticeReducer";
 
-const NewBlog = ({ update, test }) => {
+const NewBlog = () => {
   const dispatch = useDispatch();
 
   const handleCreate = async (event) => {
@@ -17,9 +17,7 @@ const NewBlog = ({ update, test }) => {
         author: event.target.Author.value,
         url: event.target.Url.value,
       };
-      if (test) {
-        test(newBlog);
-      }
+
       // console.log(newBlog);
 
       // update(res);
