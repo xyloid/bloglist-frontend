@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = useDispatch();
-  const blog_redux = useSelector(state=>state)
+  const blog_redux = useSelector((state) => state);
 
   const [blogs, setBlogs] = useState([]);
 
