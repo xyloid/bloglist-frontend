@@ -1,4 +1,4 @@
-const noticeReducer = (state, action) => {
+const noticeReducer = (state="", action) => {
   switch (action.type) {
     case "NOTICE_SET":
       return action.data;

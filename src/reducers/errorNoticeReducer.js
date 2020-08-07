@@ -1,4 +1,4 @@
-const errorNoticeReducer = (state, action) => {
+const errorNoticeReducer = (state="", action) => {
     switch (action.type) {
       case "ERR_NOTICE_SET":
         return action.data;

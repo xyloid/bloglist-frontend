@@ -1,7 +1,17 @@
-import {createStore} from 'redux'
-import blogReducer from './reducers/blogReducer'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { createStore, combineReducers } from "redux";
+import blogReducer from "./reducers/blogReducer";
+import userReducer from "./reducers/userReducer";
+import noticeReducer from "./reducers/noticeReducer";
+import errNoticeReducer from "./reducers/errorNoticeReducer";
+import { composeWithDevTools } from "redux-devtools-extension";
 
-const store =createStore(blogReducer,composeWithDevTools())
+const reducers = combineReducers({
+  blogs: blogReducer,
+  user: userReducer,
+  notice: noticeReducer,
+  errNotice: errNoticeReducer,
+});
 
-export default store
+const store = createStore(reducers, composeWithDevTools());
+
+export default store;

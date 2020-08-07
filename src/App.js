@@ -7,12 +7,12 @@ import ErrorNotice from "./components/ErrorNotice";
 import NewBlog from "./components/NewBlog";
 import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
-import { initBlog } from "./reducers/userReducer";
+import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = useDispatch();
-  const blog_redux = useSelector((state) => state);
+  const blog_redux = useSelector((state) => state.blogs);
 
   const [blogs, setBlogs] = useState([]);
 
