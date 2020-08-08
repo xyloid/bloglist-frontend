@@ -7,20 +7,15 @@ import ErrorNotice from "./components/ErrorNotice";
 import NewBlog from "./components/NewBlog";
 import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
-import Users from "./components/User";
+import Users from "./components/Users";
 import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setNoticeContent } from "./reducers/noticeReducer";
 import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
-import { setCurrentUser } from "./reducers/userReducer";
+import { setCurrentUser, getAllUsers } from "./reducers/userReducer";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
+import UserDetails from "./components/UserDetails";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,6 +25,7 @@ const App = () => {
   // useEffect
   useEffect(() => {
     dispatch(initBlog());
+    dispatch(getAllUsers());
 
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
@@ -76,6 +72,7 @@ const App = () => {
     dispatch(setCurrentUser(null));
 
     dispatch(setNoticeContent(`You have logged out`));
+
     setTimeout(() => {
       dispatch(setNoticeContent(null));
     }, 5000);
@@ -93,91 +90,99 @@ const App = () => {
 
   // internal components
 
-  const loginForm = () => (
-    <Togglable buttonLabel="login">
-      <LoginFrom handleLogin={handleLogin} />
-    </Togglable>
-  );
+  // const loginForm = () => (
+  //   <Togglable buttonLabel="login">
+  //     <LoginFrom handleLogin={handleLogin} />
+  //   </Togglable>
+  // );
 
-  const userInfo = () => (
-    <div>
-      <p>
-        {users_info.user.name} logged in{" "}
-        <button onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="new blog">
-        <NewBlog />
-      </Togglable>
-      <Users />
-      <h2>blogs</h2>
-      {blog_redux.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
-    </div>
-  );
+  // const userInfo = () => (
+  //   <div>
+  //     <p>
+  //       {users_info.user.name} logged in{" "}
+  //       <button onClick={handleLogout}>logout</button>
+  //     </p>
+  //     <Togglable buttonLabel="new blog">
+  //       <NewBlog />
+  //     </Togglable>
+  //     <Users />
+  //     <h2>blogs</h2>
+  //     {blog_redux.map((blog) => (
+  //       <Blog key={blog.id} blog={blog} />
+  //     ))}
+  //   </div>
+  // );
 
   const padding = {
     padding: 5,
   };
 
+  const match = useRouteMatch("/users/:id");
+  const user = match
+    ? users_info.users.find((u) => u.id === match.params.id)
+    : null;
+
   return (
     <div>
-      <Router>
-        <div>
-          <Link style={padding} to="/">
-            Home
+      <div>
+        <Link style={padding} to="/">
+          Home
+        </Link>
+        <Link style={padding} to="/users">
+          Users
+        </Link>
+
+        {users_info.user ? <em>{users_info.user.name} logged in</em> : null}
+        {users_info.user ? (
+          <button onClick={handleLogout}>logout</button>
+        ) : (
+          <Link style={padding} to="/login">
+            login
           </Link>
-          <Link style={padding} to="/users">
-            Users
-          </Link>
+        )}
+      </div>
 
-          {users_info.user ? <em>{users_info.user.name} logged in</em> : null}
-          {users_info.user ? (
-            <button onClick={handleLogout}>logout</button>
-          ) : (
-            <Link style={padding} to="/login">
-              login
-            </Link>
-          )}
-        </div>
+      <Notification />
+      <ErrorNotice />
 
-        <Notification />
-        <ErrorNotice />
-
-        <Switch>
-          <Route
-            path="/login"
-            render={() =>
-              users_info.user ? (
-                <Redirect to="/" />
-              ) : (
-                <LoginFrom handleLogin={handleLogin} />
-              )
-            }
-          />
-
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route
-            path="/"
-            render={() =>
-              users_info.user ? (
-                <div>
-                  <Togglable buttonLabel="new blog">
-                    <NewBlog />
-                  </Togglable>
-                  {blog_redux.map((blog) => (
-                    <Blog key={blog.id} blog={blog} />
-                  ))}
-                </div>
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
-        </Switch>
-      </Router>
+      <Switch>
+        <Route path="/users/:id">
+          <UserDetails user={user} />
+        </Route>
+        <Route
+          path="/login"
+          render={() =>
+            users_info.user ? (
+              <Redirect to="/" />
+            ) : (
+              <LoginFrom handleLogin={handleLogin} />
+            )
+          }
+        />
+        {/* <Route path="/login">
+            <LoginFrom handleLogin={handleLogin} />
+          </Route> */}
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route
+          path="/"
+          render={() =>
+            users_info.user ? (
+              <div>
+                <Togglable buttonLabel="new blog">
+                  <NewBlog />
+                </Togglable>
+                {blog_redux.map((blog) => (
+                  <Blog key={blog.id} blog={blog} />
+                ))}
+              </div>
+            ) : (
+              <Redirect to="/login" />
+            )
+          }
+        />
+      </Switch>
     </div>
   );
 };
