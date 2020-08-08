@@ -7,7 +7,7 @@ import ErrorNotice from "./components/ErrorNotice";
 import NewBlog from "./components/NewBlog";
 import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
-import Users from "./components/User";
+import Users from "./components/Users";
 import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setNoticeContent } from "./reducers/noticeReducer";
