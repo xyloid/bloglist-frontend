@@ -14,7 +14,13 @@ import { setNoticeContent } from "./reducers/noticeReducer";
 import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
 import { setCurrentUser } from "./reducers/userReducer";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -124,8 +130,10 @@ const App = () => {
           <Link style={padding} to="/users">
             Users
           </Link>
+
+          {users_info.user ? <em>{users_info.user.name} logged in</em> : null}
           {users_info.user ? (
-            <em>{users_info.user.name} logged in</em>
+            <button onClick={handleLogout}>logout</button>
           ) : (
             <Link style={padding} to="/login">
               login
@@ -134,9 +142,17 @@ const App = () => {
         </div>
 
         <Switch>
-          <Route path="/login">
-            <LoginFrom handleLogin={handleLogin} />
-          </Route>
+          <Route
+            path="/login"
+            render={() =>
+              users_info.user ? (
+                <Redirect to="/" />
+              ) : (
+                <LoginFrom handleLogin={handleLogin} />
+              )
+            }
+          />
+
           <Route path="/users">
             <Users />
           </Route>
