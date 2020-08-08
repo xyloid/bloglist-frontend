@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { likeBlog, delBlog } from "../reducers/blogReducer";
 
 const Blog = ({ blog }) => {
+  console.log('blog',blog)
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);

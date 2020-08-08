@@ -28,7 +28,7 @@ const App = () => {
       dispatch(setCurrentUser(user));
       blogService.setToken(user.token);
     }
-  }, []);
+  }, [dispatch]);
 
   // event handlers
 

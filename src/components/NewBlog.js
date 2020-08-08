@@ -10,7 +10,7 @@ const NewBlog = () => {
 
   const handleCreate = async (event) => {
     event.preventDefault();
-    console.log(event.target.author.value);
+
     try {
       const newBlog = {
         title: event.target.Title.value,
@@ -28,11 +28,12 @@ const NewBlog = () => {
       event.target.Url.value = "";
 
       // this part must be executed after the event target is modified.
-      const res = await blogService.create(newBlog);
-      console.log("new blog", res);
+      // const res = await blogService.create(newBlog);
+      // console.log("new blog", res);
 
-      dispatch(createBlog(res));
-      dispatch(setNoticeContent(`${res.title} by ${res.author} added`));
+      dispatch(createBlog(newBlog));
+
+      dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`));
       setTimeout(() => {
         dispatch(setNoticeContent(null));
       }, 5000);

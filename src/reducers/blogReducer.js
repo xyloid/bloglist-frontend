@@ -5,7 +5,8 @@ const blogReducer = (state = [], action) => {
     case "INIT_BLOG":
       return action.data.sort((a, b) => b.likes - a.likes);
     case "NEW_BLOG":
-      return state.concat(action.data);
+      console.log('action data',action.data)
+      return state.concat({...action.data});
     case "LIKE_BLOG": {
       const id = action.data.id;
       const liked = state.find((blog) => blog.id === id);
@@ -27,9 +28,13 @@ const blogReducer = (state = [], action) => {
 };
 
 export const createBlog = (newBlog) => {
-  return {
-    type: "NEW_BLOG",
-    data: newBlog,
+  return async (dispatch) => {
+    const res = await blogService.create(newBlog);
+    console.log(res)
+    return dispatch({
+      type: "NEW_BLOG",
+      data: res,
+    });
   };
 };
 
