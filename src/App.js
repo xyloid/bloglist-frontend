@@ -12,7 +12,7 @@ import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setNoticeContent } from "./reducers/noticeReducer";
 import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
-import { setCurrentUser } from "./reducers/userReducer";
+import { setCurrentUser, getAllUsers } from "./reducers/userReducer";
 
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import UserDetails from "./components/UserDetails";
@@ -25,6 +25,7 @@ const App = () => {
   // useEffect
   useEffect(() => {
     dispatch(initBlog());
+    dispatch(getAllUsers());
 
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
@@ -146,7 +147,7 @@ const App = () => {
 
       <Switch>
         <Route path="/users/:id">
-          <UserDetails user={user}/>
+          <UserDetails user={user} />
         </Route>
         <Route
           path="/login"
