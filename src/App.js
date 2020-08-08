@@ -20,10 +20,13 @@ import {
   Route,
   Link,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 
+
+
 const App = () => {
-  
+
 
   const dispatch = useDispatch();
   const blog_redux = useSelector((state) => state.blogs);
@@ -42,7 +45,7 @@ const App = () => {
   }, [dispatch]);
 
   // event handlers
-
+  
   const handleLogin = async (usernm, passwd) => {
     try {
       const currentUser = await loginService.login({
@@ -63,6 +66,7 @@ const App = () => {
       setTimeout(() => {
         dispatch(setNoticeContent(null));
       }, 5000);
+
     } catch (exception) {
       console.log("login error", exception);
       dispatch(setErrorNoticeContent("failed to log in"));
@@ -148,7 +152,7 @@ const App = () => {
         <ErrorNotice />
 
         <Switch>
-          <Route
+          {/* <Route
             path="/login"
             render={() =>
               users_info.user ? (
@@ -157,10 +161,10 @@ const App = () => {
                 <LoginFrom handleLogin={handleLogin} />
               )
             }
-          />
-          {/* <Route path="/login">
+          /> */}
+          <Route path="/login">
             <LoginFrom handleLogin={handleLogin} />
-          </Route> */}
+          </Route>
           <Route path="/users">
             <Users />
           </Route>
