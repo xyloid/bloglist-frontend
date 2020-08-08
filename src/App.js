@@ -16,6 +16,7 @@ import { setCurrentUser, getAllUsers } from "./reducers/userReducer";
 
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import UserDetails from "./components/UserDetails";
+import BlogDetails from "./components/BlogDetails";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -117,10 +118,15 @@ const App = () => {
     padding: 5,
   };
 
-  const match = useRouteMatch("/users/:id");
-  const user = match
-    ? users_info.users.find((u) => u.id === match.params.id)
+  const matchUser = useRouteMatch("/users/:id");
+  const user = matchUser
+    ? users_info.users.find((u) => u.id === matchUser.params.id)
     : null;
+
+  const matchBlog = useRouteMatch("/blogs/:id");
+  const blog = matchBlog
+  ? blog_redux.find((u) => u.id === matchBlog.params.id)
+  : null;
 
   return (
     <div>
@@ -148,6 +154,9 @@ const App = () => {
       <Switch>
         <Route path="/users/:id">
           <UserDetails user={user} />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogDetails blog={blog} />
         </Route>
         <Route
           path="/login"
