@@ -17,7 +17,7 @@ import { setCurrentUser } from "./reducers/userReducer";
 const App = () => {
   const dispatch = useDispatch();
   const blog_redux = useSelector((state) => state.blogs);
-  const userLoggedIn = useSelector((state) => state.user);
+  const user_info = useSelector((state) => state.user);
 
   // useEffect
   useEffect(() => {
@@ -94,7 +94,7 @@ const App = () => {
   const userInfo = () => (
     <div>
       <p>
-        {userLoggedIn.user.name} logged in{" "}
+        {user_info.user.name} logged in{" "}
         <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="new blog">
@@ -113,7 +113,7 @@ const App = () => {
       <Notification />
       <ErrorNotice />
 
-      {userLoggedIn.user === null ? loginForm() : userInfo()}
+      {user_info.user === null ? loginForm() : userInfo()}
     </div>
   );
 };
