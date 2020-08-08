@@ -23,6 +23,8 @@ import {
 } from "react-router-dom";
 
 const App = () => {
+  
+
   const dispatch = useDispatch();
   const blog_redux = useSelector((state) => state.blogs);
   const users_info = useSelector((state) => state.user);
@@ -76,6 +78,7 @@ const App = () => {
     dispatch(setCurrentUser(null));
 
     dispatch(setNoticeContent(`You have logged out`));
+
     setTimeout(() => {
       dispatch(setNoticeContent(null));
     }, 5000);
@@ -93,28 +96,28 @@ const App = () => {
 
   // internal components
 
-  const loginForm = () => (
-    <Togglable buttonLabel="login">
-      <LoginFrom handleLogin={handleLogin} />
-    </Togglable>
-  );
+  // const loginForm = () => (
+  //   <Togglable buttonLabel="login">
+  //     <LoginFrom handleLogin={handleLogin} />
+  //   </Togglable>
+  // );
 
-  const userInfo = () => (
-    <div>
-      <p>
-        {users_info.user.name} logged in{" "}
-        <button onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="new blog">
-        <NewBlog />
-      </Togglable>
-      <Users />
-      <h2>blogs</h2>
-      {blog_redux.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
-    </div>
-  );
+  // const userInfo = () => (
+  //   <div>
+  //     <p>
+  //       {users_info.user.name} logged in{" "}
+  //       <button onClick={handleLogout}>logout</button>
+  //     </p>
+  //     <Togglable buttonLabel="new blog">
+  //       <NewBlog />
+  //     </Togglable>
+  //     <Users />
+  //     <h2>blogs</h2>
+  //     {blog_redux.map((blog) => (
+  //       <Blog key={blog.id} blog={blog} />
+  //     ))}
+  //   </div>
+  // );
 
   const padding = {
     padding: 5,
@@ -155,7 +158,9 @@ const App = () => {
               )
             }
           />
-
+          {/* <Route path="/login">
+            <LoginFrom handleLogin={handleLogin} />
+          </Route> */}
           <Route path="/users">
             <Users />
           </Route>
