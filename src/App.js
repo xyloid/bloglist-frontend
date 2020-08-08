@@ -7,12 +7,14 @@ import ErrorNotice from "./components/ErrorNotice";
 import NewBlog from "./components/NewBlog";
 import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
-import Users from "./components/User"
+import Users from "./components/User";
 import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setNoticeContent } from "./reducers/noticeReducer";
 import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
 import { setCurrentUser } from "./reducers/userReducer";
+
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -108,11 +110,45 @@ const App = () => {
     </div>
   );
 
+  const padding = {
+    padding: 5,
+  };
+
   return (
     <div>
+      <Router>
+        <div>
+          <Link style={padding} to="/">
+            Home
+          </Link>
+          <Link style={padding} to="/users">
+            Users
+          </Link>
+          {users_info.user ? (
+            <em>{users_info.user.name} logged in</em>
+          ) : (
+            <Link style={padding} to="/login">
+              login
+            </Link>
+          )}
+        </div>
+
+        <Switch>
+          <Route path="/login">
+            <LoginFrom handleLogin={handleLogin} />
+          </Route>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            <p>Home</p>
+          </Route>
+        </Switch>
+      </Router>
+
       <Notification />
       <ErrorNotice />
-
+      <p>outdated</p>
       {users_info.user === null ? loginForm() : userInfo()}
     </div>
   );
