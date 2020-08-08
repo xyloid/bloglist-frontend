@@ -152,7 +152,7 @@ const App = () => {
         <ErrorNotice />
 
         <Switch>
-          {/* <Route
+          <Route
             path="/login"
             render={() =>
               users_info.user ? (
@@ -161,10 +161,10 @@ const App = () => {
                 <LoginFrom handleLogin={handleLogin} />
               )
             }
-          /> */}
-          <Route path="/login">
+          />
+          {/* <Route path="/login">
             <LoginFrom handleLogin={handleLogin} />
-          </Route>
+          </Route> */}
           <Route path="/users">
             <Users />
           </Route>
