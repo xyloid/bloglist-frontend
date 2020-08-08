@@ -18,26 +18,17 @@ const App = () => {
   const blog_redux = useSelector((state) => state.blogs);
   const userLoggedIn = useSelector((state) => state.user);
 
-  const updateBlogs = () => {
-    // dispatch(initBlog());
-    console.log("update all blogs");
-    blogService
-      .getAll()
-      .then((blogs) =>
-        dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes)))
-      );
-  };
-
   // useEffect
-  useEffect(updateBlogs, []);
-
   useEffect(() => {
+    dispatch(initBlog());
+
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
+      dispatch(setCurrentUser(user));
       blogService.setToken(user.token);
     }
-  }, []);
+  }, [dispatch]);
 
   // event handlers
 
@@ -61,7 +52,6 @@ const App = () => {
       setTimeout(() => {
         dispatch(setNoticeContent(null));
       }, 5000);
-
     } catch (exception) {
       console.log("login error", exception);
       dispatch(setErrorNoticeContent("failed to log in"));
@@ -72,7 +62,6 @@ const App = () => {
   };
 
   const handleLogout = () => {
-
     window.localStorage.removeItem("loggedNoteappUser");
 
     dispatch(setCurrentUser(null));
@@ -104,7 +93,8 @@ const App = () => {
   const userInfo = () => (
     <div>
       <p>
-        {userLoggedIn.name} logged in <button onClick={handleLogout}>logout</button>
+        {userLoggedIn.name} logged in{" "}
+        <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="new blog">
         <NewBlog />

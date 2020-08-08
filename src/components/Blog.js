@@ -18,14 +18,12 @@ const Blog = ({ blog }) => {
 
   const handleLike = async () => {
     try {
-
       // setup new likes number and the update the redux and blogService at the same time.
       // blog.likes = blogEntry.likes;
-      blog.likes = blog.likes + 1;
+      // blog.likes = blog.likes + 1;
 
       dispatch(likeBlog(blog));
-      // setBlogEntry({ ...blog });
-      await blogService.update(blog);
+      // await blogService.update(blog);
     } catch (exception) {
       console.log(exception);
     }
@@ -34,9 +32,7 @@ const Blog = ({ blog }) => {
   const handleRemove = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
       try {
-        await blogService.remove(blog);
-        dispatch(delBlog(blog.id));
-        // updateAll();
+        dispatch(delBlog(blog));
       } catch (exception) {
         console.log(exception);
       }
@@ -46,8 +42,7 @@ const Blog = ({ blog }) => {
   return (
     <div>
       <div id="simple" className="blog" style={hideWhenShow}>
-        {blog.title}{" "}
-        {blog.user ? blog.user.name : blog.author}
+        {blog.title} {blog.author}
         <button onClick={toggleShow}>view</button>
       </div>
       <div id="detail" className="blog" style={renderWhenShow}>
@@ -58,9 +53,7 @@ const Blog = ({ blog }) => {
         <p className="line">
           {blog.likes} <button onClick={handleLike}>like</button>
         </p>
-        <p className="line">
-          {blog.user ? blog.user.name : blog.author}
-        </p>
+        <p className="line">{blog.author}</p>
         <button onClick={handleRemove}>remove</button>
       </div>
     </div>
