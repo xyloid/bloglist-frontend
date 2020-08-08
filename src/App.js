@@ -141,6 +141,9 @@ const App = () => {
           )}
         </div>
 
+        <Notification />
+        <ErrorNotice />
+
         <Switch>
           <Route
             path="/login"
@@ -156,16 +159,25 @@ const App = () => {
           <Route path="/users">
             <Users />
           </Route>
-          <Route path="/">
-            <p>Home</p>
-          </Route>
+          <Route
+            path="/"
+            render={() =>
+              users_info.user ? (
+                <div>
+                  <Togglable buttonLabel="new blog">
+                    <NewBlog />
+                  </Togglable>
+                  {blog_redux.map((blog) => (
+                    <Blog key={blog.id} blog={blog} />
+                  ))}
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
         </Switch>
       </Router>
-
-      <Notification />
-      <ErrorNotice />
-      <p>outdated</p>
-      {users_info.user === null ? loginForm() : userInfo()}
     </div>
   );
 };
