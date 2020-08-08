@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { likeBlog } from "../reducers/blogReducer";
 
 const BlogDetails = ({ blog }) => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   if (blog) {
     const handleLike = async () => {
       try {
@@ -22,14 +22,23 @@ const BlogDetails = ({ blog }) => {
       <div>
         <h1>{blog.title}</h1>
         <p>
-          <a href={blog.url} target="_blank">
+          <a href={blog.url} target="_blank" rel="noopener noreferrer">
             {blog.url}
           </a>
         </p>
         <p>
           {blog.likes} likes <button onClick={handleLike}>like</button>
         </p>
-    <p>added by {blog.author}</p>
+        <p>added by <em>{blog.author}</em></p>
+
+        <div>
+          <h2>comments</h2>
+          <ul>
+            {blog.comments.map((c, i) => (
+              <li key={i}>{c}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     );
   } else {
