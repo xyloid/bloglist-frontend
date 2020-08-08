@@ -1,13 +1,16 @@
-
-const UserDetails = ()=>{
-return (<div>
-    <h1>User Name</h1>
-    <h2>added blogs</h2>
-    <ul>
+import React from "react";
+const UserDetails = ({ user }) => {
+    console.log(user)
+  return (
+    <div>
+      <h1>name</h1>
+      <h2>added blogs</h2>
+      <ul>
         <li>1st</li>
         <li>2nd</li>
-    </ul>
-</div>)
-}
+      </ul>
+    </div>
+  );
+};
 
-export default UserDetails
+export default UserDetails;

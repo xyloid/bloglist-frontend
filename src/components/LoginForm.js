@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 const LoginForm = ({ handleLogin }) => {
-  const history = useHistory();
+  // const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,7 +12,7 @@ const LoginForm = ({ handleLogin }) => {
     handleLogin(username, password);
     setUsername("");
     setPassword("");
-    history.push("/");
+    // history.push("/");
   };
 
   return (

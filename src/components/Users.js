@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from "../reducers/userReducer";
+import { Link } from "react-router-dom";
 
 const User = ({ user }) => {
   return (
     <tr>
-      <td>{user.name}</td>
+      <td>
+        <Link to={`/users/${user.id}`}>{user.name}</Link>
+      </td>
       <td>{user.blogs.length}</td>
     </tr>
   );
