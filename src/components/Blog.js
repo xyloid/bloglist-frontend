@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { likeBlog, delBlog } from "../reducers/blogReducer";
 

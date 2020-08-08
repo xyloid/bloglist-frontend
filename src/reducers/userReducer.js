@@ -1,11 +1,14 @@
-const userReducer = (state = null, action) => {
+import userService from "../services/users";
+
+const userReducer = (state = {user:null,users:[]}, action) => {
   switch (action.type) {
     case "USER_SET":
-      return action.data;
+      return { ...state, user: action.data };
     case "USER_DEL":
       return null;
     case "ALL_USERS":
-      return state;
+      console.log("all users", action.data);
+      return { ...state, users: action.data };
     default:
       return state;
   }
@@ -21,6 +24,16 @@ export const setCurrentUser = (user) => {
 export const delCurrentUser = () => {
   return {
     type: "USER_DEL",
+  };
+};
+
+export const getAllUsers = () => {
+  return async (dispatch) => {
+    const users = await userService.getAll();
+    return dispatch({
+      type: "ALL_USERS",
+      data: users,
+    });
   };
 };
 

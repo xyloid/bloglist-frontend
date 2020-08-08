@@ -1,5 +1,4 @@
 import React from "react";
-import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
