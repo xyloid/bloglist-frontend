@@ -61,7 +61,7 @@ export const initBlog = () => {
 
 export const delBlog = (blog) => {
   return async (dispatch) => {
-    const res = await blogService.remove(blog);
+    await blogService.remove(blog);
     return dispatch({
       type: "DEL_BLOG",
       data: { id: blog.id },

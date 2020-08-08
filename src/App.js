@@ -7,6 +7,7 @@ import ErrorNotice from "./components/ErrorNotice";
 import NewBlog from "./components/NewBlog";
 import Togglable from "./components/Togglable";
 import LoginFrom from "./components/LoginForm";
+import Users from "./components/User"
 import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setNoticeContent } from "./reducers/noticeReducer";
@@ -93,12 +94,13 @@ const App = () => {
   const userInfo = () => (
     <div>
       <p>
-        {userLoggedIn.name} logged in{" "}
+        {userLoggedIn.user.name} logged in{" "}
         <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="new blog">
         <NewBlog />
       </Togglable>
+      <Users />
       <h2>blogs</h2>
       {blog_redux.map((blog) => (
         <Blog key={blog.id} blog={blog} />
@@ -111,7 +113,7 @@ const App = () => {
       <Notification />
       <ErrorNotice />
 
-      {userLoggedIn === null ? loginForm() : userInfo()}
+      {userLoggedIn.user === null ? loginForm() : userInfo()}
     </div>
   );
 };
