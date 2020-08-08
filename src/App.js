@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -11,19 +11,21 @@ import { initBlog } from "./reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setNoticeContent } from "./reducers/noticeReducer";
 import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
+import { setCurrentUser } from "./reducers/userReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   const blog_redux = useSelector((state) => state.blogs);
-
-  const [user, setUser] = useState(null);
+  const userLoggedIn = useSelector((state) => state.user);
 
   const updateBlogs = () => {
     // dispatch(initBlog());
-    console.log('update all blogs')
+    console.log("update all blogs");
     blogService
       .getAll()
-      .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
+      .then((blogs) =>
+        dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes)))
+      );
   };
 
   // useEffect
@@ -33,7 +35,6 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
       blogService.setToken(user.token);
     }
   }, []);
@@ -47,6 +48,8 @@ const App = () => {
         password: passwd,
       });
 
+      dispatch(setCurrentUser(currentUser));
+
       window.localStorage.setItem(
         "loggedNoteappUser",
         JSON.stringify(currentUser)
@@ -59,7 +62,6 @@ const App = () => {
         dispatch(setNoticeContent(null));
       }, 5000);
 
-      setUser(currentUser);
     } catch (exception) {
       console.log("login error", exception);
       dispatch(setErrorNoticeContent("failed to log in"));
@@ -70,8 +72,10 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    setUser(null);
+
     window.localStorage.removeItem("loggedNoteappUser");
+
+    dispatch(setCurrentUser(null));
 
     dispatch(setNoticeContent(`You have logged out`));
     setTimeout(() => {
@@ -100,7 +104,7 @@ const App = () => {
   const userInfo = () => (
     <div>
       <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
+        {userLoggedIn.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="new blog">
         <NewBlog />
@@ -117,7 +121,7 @@ const App = () => {
       <Notification />
       <ErrorNotice />
 
-      {user === null ? loginForm() : userInfo()}
+      {userLoggedIn === null ? loginForm() : userInfo()}
     </div>
   );
 };
