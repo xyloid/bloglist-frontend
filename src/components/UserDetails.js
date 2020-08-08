@@ -7,13 +7,12 @@ const UserDetails = ({ user }) => {
         <h1>{user.name}</h1>
         <h2>added blogs</h2>
         <ul>
-          <li>1st</li>
-          <li>2nd</li>
+          {user.blogs.map(blog=><li>{blog.title}</li>)}
         </ul>
       </div>
     );
   } else {
-    return null;
+    return <p>Invalid user id</p>;
   }
 };
 
