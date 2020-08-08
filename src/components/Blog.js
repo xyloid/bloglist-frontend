@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { likeBlog, delBlog } from "../reducers/blogReducer";
 
 const Blog = ({ blog }) => {
-  console.log('blog',blog)
+  console.log("blog", blog);
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
@@ -19,7 +19,6 @@ const Blog = ({ blog }) => {
 
   const handleLike = async () => {
     try {
-
       // setup new likes number and the update the redux and blogService at the same time.
       // blog.likes = blogEntry.likes;
       blog.likes = blog.likes + 1;
@@ -47,8 +46,7 @@ const Blog = ({ blog }) => {
   return (
     <div>
       <div id="simple" className="blog" style={hideWhenShow}>
-        {blog.title}{" "}
-        {blog.user ? blog.user.name : blog.author}
+        {blog.title} {blog.author}
         <button onClick={toggleShow}>view</button>
       </div>
       <div id="detail" className="blog" style={renderWhenShow}>
@@ -59,9 +57,7 @@ const Blog = ({ blog }) => {
         <p className="line">
           {blog.likes} <button onClick={handleLike}>like</button>
         </p>
-        <p className="line">
-          {blog.user ? blog.user.name : blog.author}
-        </p>
+        <p className="line">{blog.author}</p>
         <button onClick={handleRemove}>remove</button>
       </div>
     </div>
