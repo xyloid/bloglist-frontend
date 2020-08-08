@@ -18,20 +18,16 @@ const App = () => {
   const blog_redux = useSelector((state) => state.blogs);
   const userLoggedIn = useSelector((state) => state.user);
 
-  const updateBlogs = () => {
-    // dispatch(initBlog());
+  // useEffect
+  useEffect(() => {
+
     console.log("update all blogs");
     blogService
       .getAll()
       .then((blogs) =>
         dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes)))
       );
-  };
 
-  // useEffect
-  useEffect(updateBlogs, []);
-
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
