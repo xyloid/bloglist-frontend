@@ -32,8 +32,7 @@ const Blog = ({ blog }) => {
   const handleRemove = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
       try {
-        await blogService.remove(blog);
-        dispatch(delBlog(blog.id));
+        dispatch(delBlog(blog));
       } catch (exception) {
         console.log(exception);
       }

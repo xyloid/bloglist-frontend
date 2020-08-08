@@ -59,10 +59,13 @@ export const initBlog = () => {
   };
 };
 
-export const delBlog = (id) => {
-  return {
-    type: "DEL_BLOG",
-    data: { id },
+export const delBlog = (blog) => {
+  return async (dispatch) => {
+    const res = await blogService.remove(blog);
+    return dispatch({
+      type: "DEL_BLOG",
+      data: { id: blog.id },
+    });
   };
 };
 
