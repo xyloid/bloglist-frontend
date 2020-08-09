@@ -23,6 +23,9 @@ import {
   Table,
   Paper,
   TableCell,
+  AppBar,
+  TableBody,
+  TableHead,
 } from "@material-ui/core";
 
 const App = () => {
@@ -102,6 +105,8 @@ const App = () => {
 
   return (
     <div>
+
+
       <div>
         <Link style={padding} to="/">
           Home
@@ -157,14 +162,22 @@ const App = () => {
 
                 <TableContainer component={Paper}>
                   <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Blog Title</TableCell>
+                        <TableCell>Author</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {blog_redux.map((blog) => (
-                      <TableRow id={blog.id}>
+                      <TableRow key={blog.id}>
                         <TableCell>
                           <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
                         </TableCell>
                         <TableCell>{blog.author}</TableCell>
                       </TableRow>
                     ))}
+                    </TableBody>
                   </Table>
                 </TableContainer>
               </div>
