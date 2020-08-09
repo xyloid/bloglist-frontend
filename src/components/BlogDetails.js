@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { likeBlog } from "../reducers/blogReducer";
+import { likeBlog, addComment } from "../reducers/blogReducer";
 
 const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch();
@@ -18,6 +18,18 @@ const BlogDetails = ({ blog }) => {
       }
     };
 
+    const handleComment = (event) => {
+      event.preventDefault();
+      try {
+          const comment = event.target.Comment.value
+          event.target.Comment.value = ""
+          dispatch(addComment(blog, comment))
+      } catch (exception) {
+        console.log(exception.json);
+        console.log("failed to create new blog", exception);
+      }
+    };
+
     return (
       <div>
         <h1>{blog.title}</h1>
@@ -29,10 +41,16 @@ const BlogDetails = ({ blog }) => {
         <p>
           {blog.likes} likes <button onClick={handleLike}>like</button>
         </p>
-        <p>added by <em>{blog.author}</em></p>
+        <p>
+          added by <em>{blog.author}</em>
+        </p>
 
         <div>
           <h2>comments</h2>
+          <form onSubmit={handleComment}>
+            <input type="text" name="Comment" />
+            <button type="submit">add comment</button>
+          </form>
           <ul>
             {blog.comments.map((c, i) => (
               <li key={i}>{c}</li>
