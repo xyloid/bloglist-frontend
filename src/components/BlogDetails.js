@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { likeBlog, addComment } from "../reducers/blogReducer";
 import { Button, TextField } from "@material-ui/core";
+import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
+
 const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch();
   if (blog) {
@@ -23,7 +25,14 @@ const BlogDetails = ({ blog }) => {
       try {
         const comment = event.target.Comment.value;
         event.target.Comment.value = "";
-        dispatch(addComment(blog, comment));
+        if (comment.trim() !== "") {
+          dispatch(addComment(blog, comment));
+        } else {
+          dispatch(setErrorNoticeContent("empty comment"));
+          setTimeout(() => {
+            dispatch(setErrorNoticeContent(null));
+          }, 5000);
+        }
       } catch (exception) {
         console.log(exception.json);
         console.log("failed to create new blog", exception);
@@ -55,12 +64,12 @@ const BlogDetails = ({ blog }) => {
 
         <div>
           <h2>comments</h2>
-          <form onSubmit={handleComment} style={{ verticalAlign: "bottom"}}>
+          <form onSubmit={handleComment} style={{ verticalAlign: "bottom" }}>
             <TextField label="Your comment" type="text" name="Comment" />
             <div>
-            <Button size="small" color="primary" type="submit">
-              add comment
-            </Button>
+              <Button size="small" color="primary" type="submit">
+                add comment
+              </Button>
             </div>
           </form>
           <ul>
