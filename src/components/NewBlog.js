@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
 import { setNoticeContent } from "../reducers/noticeReducer";
+import { Button, TextField } from "@material-ui/core";
 
 const NewBlog = () => {
   const dispatch = useDispatch();
@@ -51,36 +52,43 @@ const NewBlog = () => {
       <h2>Create a New Blog</h2>
       <form onSubmit={handleCreate}>
         <div>
-          title:
-          <input
+          <TextField
             id="title"
             type="text"
             name="Title"
+            label="Title"
             // value={title}
             // onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
-          author:
-          <input
+          <TextField
             id="author"
             type="text"
             name="Author"
+            label="Author"
             // value={author}
             // onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
-          url:
-          <input
+          <TextField
             id="url"
             type="text"
             name="Url"
+            label="Url"
             // value={url}
             // onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">create</button>
+        <Button
+          style={{ marginTop: 10 }}
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
+          create
+        </Button>
       </form>
     </div>
   );
