@@ -26,6 +26,9 @@ import {
   AppBar,
   TableBody,
   TableHead,
+  Toolbar,
+  IconButton,
+  Button,
 } from "@material-ui/core";
 
 const App = () => {
@@ -104,10 +107,41 @@ const App = () => {
     : null;
 
   return (
-    <div>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          ></IconButton>
+          <Button color="inherit" component={Link} to="/">
+            Home
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            Users
+          </Button>
+          {users_info.user ? (
+            <em>{users_info.user.name} logged in</em>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">
+              Login
+            </Button>
+          )}
+          {users_info.user ? (
+            <Button
+              onClick={handleLogout}
+              color="inherit"
+              component={Link}
+              to="/login"
+            >
+              logout
+            </Button>
+          ) : null}
+        </Toolbar>
+      </AppBar>
 
-
-      <div>
+      {/* <div>
         <Link style={padding} to="/">
           Home
         </Link>
@@ -123,7 +157,7 @@ const App = () => {
             login
           </Link>
         )}
-      </div>
+      </div> */}
 
       <Notification />
       <ErrorNotice />
@@ -169,14 +203,14 @@ const App = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                    {blog_redux.map((blog) => (
-                      <TableRow key={blog.id}>
-                        <TableCell>
-                          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                        </TableCell>
-                        <TableCell>{blog.author}</TableCell>
-                      </TableRow>
-                    ))}
+                      {blog_redux.map((blog) => (
+                        <TableRow key={blog.id}>
+                          <TableCell>
+                            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                          </TableCell>
+                          <TableCell>{blog.author}</TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -187,7 +221,7 @@ const App = () => {
           }
         />
       </Switch>
-    </div>
+    </>
   );
 };
 
