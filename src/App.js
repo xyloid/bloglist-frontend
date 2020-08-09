@@ -17,6 +17,13 @@ import { setCurrentUser, getAllUsers } from "./reducers/userReducer";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import UserDetails from "./components/UserDetails";
 import BlogDetails from "./components/BlogDetails";
+import {
+  TableContainer,
+  TableRow,
+  Table,
+  Paper,
+  TableCell,
+} from "@material-ui/core";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -79,41 +86,6 @@ const App = () => {
     }, 5000);
   };
 
-  // const createNewBlog = (newBlog) => {
-  //   dispatch(setNoticeContent(`${newBlog.title} by ${newBlog.author} added`));
-  //   setTimeout(() => {
-  //     dispatch(setNoticeContent(null));
-  //   }, 5000);
-  //   blogService
-  //     .getAll()
-  //     .then((blogs) =>dispatch(initBlog(blogs.sort((a, b) => b.likes - a.likes))))
-  // };
-
-  // internal components
-
-  // const loginForm = () => (
-  //   <Togglable buttonLabel="login">
-  //     <LoginFrom handleLogin={handleLogin} />
-  //   </Togglable>
-  // );
-
-  // const userInfo = () => (
-  //   <div>
-  //     <p>
-  //       {users_info.user.name} logged in{" "}
-  //       <button onClick={handleLogout}>logout</button>
-  //     </p>
-  //     <Togglable buttonLabel="new blog">
-  //       <NewBlog />
-  //     </Togglable>
-  //     <Users />
-  //     <h2>blogs</h2>
-  //     {blog_redux.map((blog) => (
-  //       <Blog key={blog.id} blog={blog} />
-  //     ))}
-  //   </div>
-  // );
-
   const padding = {
     padding: 5,
   };
@@ -125,8 +97,8 @@ const App = () => {
 
   const matchBlog = useRouteMatch("/blogs/:id");
   const blog = matchBlog
-  ? blog_redux.find((u) => u.id === matchBlog.params.id)
-  : null;
+    ? blog_redux.find((u) => u.id === matchBlog.params.id)
+    : null;
 
   return (
     <div>
@@ -182,9 +154,19 @@ const App = () => {
                 <Togglable buttonLabel="new blog">
                   <NewBlog />
                 </Togglable>
-                {blog_redux.map((blog) => (
-                  <Blog key={blog.id} blog={blog} />
-                ))}
+
+                <TableContainer component={Paper}>
+                  <Table>
+                    {blog_redux.map((blog) => (
+                      <TableRow id={blog.id}>
+                        <TableCell>
+                          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                        </TableCell>
+                        <TableCell>{blog.author}</TableCell>
+                      </TableRow>
+                    ))}
+                  </Table>
+                </TableContainer>
               </div>
             ) : (
               <Redirect to="/login" />
