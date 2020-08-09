@@ -1,39 +1,53 @@
-import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import Notification from './components/Notification'
-import ErrorNotice from './components/ErrorNotice'
-import NewBlog from './components/NewBlog'
-import Togglable from './components/Togglable'
-import LoginFrom from './components/LoginForm'
+import React, { useEffect } from "react";
+import Blog from "./components/Blog";
+import blogService from "./services/blogs";
+import loginService from "./services/login";
+import Notification from "./components/Notification";
+import ErrorNotice from "./components/ErrorNotice";
+import NewBlog from "./components/NewBlog";
+import Togglable from "./components/Togglable";
+import LoginFrom from "./components/LoginForm";
+import Users from "./components/Users";
+import { initBlog } from "./reducers/blogReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { setNoticeContent } from "./reducers/noticeReducer";
+import { setErrorNoticeContent } from "./reducers/errorNoticeReducer";
+import { setCurrentUser, getAllUsers } from "./reducers/userReducer";
+
+import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
+import UserDetails from "./components/UserDetails";
+import BlogDetails from "./components/BlogDetails";
+import {
+  TableContainer,
+  TableRow,
+  Table,
+  Paper,
+  TableCell,
+  AppBar,
+  TableBody,
+  TableHead,
+  Toolbar,
+  IconButton,
+  Button,
+} from "@material-ui/core";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-
-  const [user, setUser] = useState(null)
-
-  const [notice, setNotice] = useState(null)
-  const [errorNotice, setErrorNotice] = useState(null)
-
-
-  const updateBlogs = () => {
-    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a,b) => b.likes - a.likes)))
-  }
+  const dispatch = useDispatch();
+  const blog_redux = useSelector((state) => state.blogs);
+  const users_info = useSelector((state) => state.user);
 
   // useEffect
-  useEffect(updateBlogs, [])
-
-
-
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    dispatch(initBlog());
+    dispatch(getAllUsers());
+
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const user = JSON.parse(loggedUserJSON);
+      dispatch(setCurrentUser(user));
+      blogService.setToken(user.token);
     }
-  }, [])
+  }, [dispatch]);
 
   // event handlers
 
@@ -42,73 +56,173 @@ const App = () => {
       const currentUser = await loginService.login({
         username: usernm,
         password: passwd,
-      })
+      });
+
+      dispatch(setCurrentUser(currentUser));
 
       window.localStorage.setItem(
-        'loggedNoteappUser',
+        "loggedNoteappUser",
         JSON.stringify(currentUser)
-      )
-      blogService.setToken(currentUser.token)
+      );
+      blogService.setToken(currentUser.token);
 
-      setNotice(`${currentUser.name} logged in`)
+      // setNotice(`${currentUser.name} logged in`);
+      dispatch(setNoticeContent(`${currentUser.name} logged in`));
       setTimeout(() => {
-        setNotice(null)
-      }, 5000)
-
-      setUser(currentUser)
+        dispatch(setNoticeContent(null));
+      }, 5000);
     } catch (exception) {
-      console.log('login error', exception)
-      setErrorNotice('failed to log in')
+      console.log("login error", exception);
+      dispatch(setErrorNoticeContent("failed to log in"));
       setTimeout(() => {
-        setErrorNotice(null)
-      }, 5000)
+        dispatch(setErrorNoticeContent(null));
+      }, 5000);
     }
-  }
+  };
 
   const handleLogout = () => {
-    setUser(null)
-    window.localStorage.removeItem('loggedNoteappUser')
-  }
+    window.localStorage.removeItem("loggedNoteappUser");
 
-  const createNewBlog = (newBlog) => {
-    setNotice(`${newBlog.title} by ${newBlog.author} added`)
+    dispatch(setCurrentUser(null));
+
+    dispatch(setNoticeContent(`You have logged out`));
+
     setTimeout(() => {
-      setNotice(null)
-    }, 5000)
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }
+      dispatch(setNoticeContent(null));
+    }, 5000);
+  };
 
-  // internal components
+  const padding = {
+    padding: 5,
+  };
 
-  const loginForm = () => (
-    <Togglable buttonLabel="login">
-      <LoginFrom handleLogin={handleLogin} />
-    </Togglable>
-  )
+  const matchUser = useRouteMatch("/users/:id");
+  const user = matchUser
+    ? users_info.users.find((u) => u.id === matchUser.params.id)
+    : null;
 
-  const userInfo = () => (
-    <div>
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="new blog">
-        <NewBlog update={createNewBlog} />
-      </Togglable>
-      <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateAll={updateBlogs} />
-      ))}
-    </div>
-  )
+  const matchBlog = useRouteMatch("/blogs/:id");
+  const blog = matchBlog
+    ? blog_redux.find((u) => u.id === matchBlog.params.id)
+    : null;
 
   return (
-    <div>
-      <Notification message={notice} />
-      <ErrorNotice message={errorNotice} />
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          ></IconButton>
+          <Button color="inherit" component={Link} to="/">
+            Home
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            Users
+          </Button>
+          {users_info.user ? (
+            <em>{users_info.user.name} logged in</em>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">
+              Login
+            </Button>
+          )}
+          {users_info.user ? (
+            <Button
+              onClick={handleLogout}
+              color="inherit"
+              component={Link}
+              to="/login"
+            >
+              logout
+            </Button>
+          ) : null}
+        </Toolbar>
+      </AppBar>
 
-      {user === null ? loginForm() : userInfo()}
-    </div>
-  )
-}
+      {/* <div>
+        <Link style={padding} to="/">
+          Home
+        </Link>
+        <Link style={padding} to="/users">
+          Users
+        </Link>
 
-export default App
+        {users_info.user ? <em>{users_info.user.name} logged in</em> : null}
+        {users_info.user ? (
+          <button onClick={handleLogout}>logout</button>
+        ) : (
+          <Link style={padding} to="/login">
+            login
+          </Link>
+        )}
+      </div> */}
+
+      <Notification />
+      <ErrorNotice />
+
+      <Switch>
+        <Route path="/users/:id">
+          <UserDetails user={user} />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogDetails blog={blog} />
+        </Route>
+        <Route
+          path="/login"
+          render={() =>
+            users_info.user ? (
+              <Redirect to="/" />
+            ) : (
+              <LoginFrom handleLogin={handleLogin} />
+            )
+          }
+        />
+        {/* <Route path="/login">
+            <LoginFrom handleLogin={handleLogin} />
+          </Route> */}
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route
+          path="/"
+          render={() =>
+            users_info.user ? (
+              <div>
+                <Togglable buttonLabel="new blog">
+                  <NewBlog />
+                </Togglable>
+
+                <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Blog Title</TableCell>
+                        <TableCell>Author</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {blog_redux.map((blog) => (
+                        <TableRow key={blog.id}>
+                          <TableCell>
+                            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                          </TableCell>
+                          <TableCell>{blog.author}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+            ) : (
+              <Redirect to="/login" />
+            )
+          }
+        />
+      </Switch>
+    </>
+  );
+};
+
+export default App;
