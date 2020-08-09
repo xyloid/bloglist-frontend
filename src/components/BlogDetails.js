@@ -1,8 +1,20 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { likeBlog, addComment } from "../reducers/blogReducer";
-import { Button, TextField } from "@material-ui/core";
+import {
+  Button,
+  TextField,
+  Grid,
+  List,
+  ListItemText,
+  ListItem,
+  ListItemIcon,
+} from "@material-ui/core";
 import { setErrorNoticeContent } from "../reducers/errorNoticeReducer";
+
+import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import CreateIcon from "@material-ui/icons/Create";
+import LinkIcon from "@material-ui/icons/Link";
 
 const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch();
@@ -43,6 +55,7 @@ const BlogDetails = ({ blog }) => {
       <div>
         <h1>{blog.title}</h1>
         <p>
+          <LinkIcon />
           <a href={blog.url} target="_blank" rel="noopener noreferrer">
             {blog.url}
           </a>
@@ -59,7 +72,7 @@ const BlogDetails = ({ blog }) => {
           </Button>
         </p>
         <p>
-          added by <em>{blog.author}</em>
+          <CreateIcon /> added by <em>{blog.author}</em>
         </p>
 
         <div>
@@ -72,11 +85,16 @@ const BlogDetails = ({ blog }) => {
               </Button>
             </div>
           </form>
-          <ul>
+          <List>
             {blog.comments.map((c, i) => (
-              <li key={i}>{c}</li>
+              <ListItem key={i}>
+                <ListItemIcon>
+                  <ChatBubbleOutlineIcon />
+                </ListItemIcon>
+                <ListItemText>{c}</ListItemText>
+              </ListItem>
             ))}
-          </ul>
+          </List>
         </div>
       </div>
     );
