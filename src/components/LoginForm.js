@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { TextField, Button } from "@material-ui/core";
 // import { useHistory } from "react-router-dom";
 
 const LoginForm = ({ handleLogin }) => {
@@ -21,25 +22,33 @@ const LoginForm = ({ handleLogin }) => {
 
       <form onSubmit={login}>
         <div>
-          username
-          <input
+          <TextField
             value={username}
             name="Username"
+            label="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div>
-          password
-          <input
+          <TextField
             value={password}
             name="Password"
             type="password"
+            label="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id="login-button" type="submit">
-          login
-        </button>
+        <div>
+          <Button
+            style={{marginTop: 10}}
+            variant="contained"
+            color="primary"
+            id="login-button"
+            type="submit"
+          >
+            login
+          </Button>
+        </div>
       </form>
     </div>
   );
